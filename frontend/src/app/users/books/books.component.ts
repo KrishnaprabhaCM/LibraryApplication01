@@ -8,14 +8,16 @@ import{ BooksModel } from './books.model';
 })
 export class BooksComponent implements OnInit {
 
-  books: BooksModel[] = [];
+  Books:any=[];
 
   constructor(private bookService:BookserviceService) { }
 
   ngOnInit(): void {
-    this.bookService.getBook().subscribe((data)=>
+    this.bookService.getBooks().subscribe((res)=>
     {
-      this.books=JSON.parse(JSON.stringify(data))
+      // this.books=JSON.parse(JSON.stringify(data))
+      console.log(res);
+      this.Books = res;
     });
   }
  

@@ -1,9 +1,14 @@
 <br><br><br><br><br><br><br><br><br><br>
+<div class="container">
 <table>
     <tbody>
-        <tr>Hello</tr>
-        <tr *ngFor="let book of books">
+        <!-- <tr>Hello</tr> -->
+        <tr *ngFor="let book of Books;let i = index;">
+            <td>{{book._id}}</td>
             <td>{{book.bookName}}</td>
+            <td>{{book.description}}</td>
+            <td>{{book.price}}</td>
         </tr>
     </tbody>
 </table>
+</div>

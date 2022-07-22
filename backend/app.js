@@ -1,12 +1,82 @@
 const express = require('express');
-// const BooksData = require('./src/model/Bookdata');
+const path = require('path');
+const mongoDb = require('../database/db');
+const bookSchema = require('../backend/src/model/Book');
 // const User = require('./src/model/user');
+const mongoose = require('mongoose');
 const cors = require('cors');
 var bodyparser=require('body-parser');
-// const jwt = require('jsonwebtoken')
-var app = new express();
-app.use(cors());
+// const { default: mongoose } = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect(mongoDb.db,{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+}).then(()=>{
+    console.log("Database connected succesfully")
+},
+error=>{
+    console.log("Database error:" +error)
+})
+
+const bookRoute = require('../backend/src/routes/book.routes');
+const app = new express();
 app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({
+    extended:false
+}));
+
+app.use(cors);
+app.use(express.static(path.join(__dirname,'dist/Library')));
+app.use('/api',bookRoute)
+
+const port = process.env.port || 8000;
+app.listen(port,()=>{
+    console.log("Listening on port "+port);
+});
+
+app.use((req,res,next)=>{
+    next(createError(404));
+});
+
+// Base route
+
+app.get('/',(req,res)=>{
+    res.send("Invalid Endpoint");
+});
+
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,'dist/Library/index.html'));
+});
+
+app.use(function(err,req,res,next){
+    console.error(err.message);
+    if(!err.statusCode) err.statusCode = 500;
+    res.status(err.statusCode).send(err.message);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const jwt = require('jsonwebtoken')
+// var app = new express();
+// app.use(cors());
+// app.use(bodyparser.json());
 // username='admin';
 // password='1234';
 
@@ -107,7 +177,7 @@ app.use(bodyparser.json());
 //    })
      
 
-app.listen(3000, function(){
-    console.log('listening to port 3000');
-});
+// app.listen(3000, function(){
+//     console.log('listening to port 3000');
+// });
 
