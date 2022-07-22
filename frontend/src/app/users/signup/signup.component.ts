@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -8,7 +9,7 @@ import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular
 })
 export class SignupComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ngZone:NgZone,private router:Router) {  }
     errmsg : any;
     errmsgshow = false;
     signupForm = new FormGroup({
@@ -28,6 +29,7 @@ export class SignupComponent implements OnInit {
     {
       console.log(this.signupForm.value,'Signupform####');
       this.errmsgshow = false;
+      this.ngZone.run(()=>this.router.navigateByUrl('/login'))
     }
     else
     {
